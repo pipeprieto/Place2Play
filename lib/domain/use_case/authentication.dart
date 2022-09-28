@@ -14,7 +14,14 @@ class Authentication {
       await repository.addUser(User(email: email, password: password));
 
   // if login is ok then data is stored on shared prefs
-  Future<bool> login(storeUser, email, password) async {}
+  Future<bool> login(storeUser, email, password) async {
+    bool existUser =
+        await repository.login(User(email: email, password: password));
+    if (existUser) {
+      await repository.storeUserInfo(User(email: email, password: password));
+    }
+    return existUser;
+  }
 
   Future<void> signup(user, password) async {
     await repository.signup(User(email: user, password: password));

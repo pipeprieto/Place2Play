@@ -35,6 +35,23 @@ class UserLocalDataSource {
     );
   }
 
+  Future<User> getUser(User user) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query("users",
+        columns: ["email", "password"],
+        where: "email = ?",
+        whereArgs: [user.email]);
+
+    if (maps.isNotEmpty) {
+      return User(
+        id: maps[0]['id'],
+        email: maps[0]['email'],
+        password: maps[0]['password'],
+      );
+    }
+    return User(email: "", password: "");
+  }
+
   Future<List<User>> getAllUsers() async {
     final db = await database;
 
